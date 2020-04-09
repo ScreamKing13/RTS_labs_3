@@ -99,7 +99,7 @@ public class lab3Fragment extends Fragment {
     private void randomMutation(int[][] population, int y) {
         for (int i = 0; i < population.length; i++) {
             int randIndex = rand.nextInt(population[0].length);
-            population[i][randIndex] = rand.nextInt(y);
+            population[i][randIndex] = rand.nextInt(y+1);
         }
     }
 

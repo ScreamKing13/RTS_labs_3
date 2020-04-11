@@ -31,6 +31,7 @@ public class lab3Fragment extends Fragment {
         final EditText cEditText = (EditText) root.findViewById(R.id.CeditText);
         final EditText dEditText = (EditText) root.findViewById(R.id.DeditText);
         final EditText yEditText = (EditText) root.findViewById(R.id.YeditText);
+        final EditText probEditText = (EditText) root.findViewById(R.id.probEditText);
         final TextView resTextView = (TextView) root.findViewById(R.id.resultTextViewL3);
         Button calcButton = (Button) root.findViewById(R.id.calcButtonL3);
 
@@ -44,8 +45,9 @@ public class lab3Fragment extends Fragment {
                     int c = Integer.parseInt(cEditText.getText().toString());
                     int d = Integer.parseInt(dEditText.getText().toString());
                     int y = Integer.parseInt(yEditText.getText().toString());
+                    double mutationProb = Double.parseDouble(probEditText.getText().toString());
                     long start = System.nanoTime();
-                    int[] xs = findSolution(a, b, c, d, y);
+                    int[] xs = findSolution(a, b, c, d, y, mutationProb);
                     long execTimeMls = (System.nanoTime() - start) / 1_000_000;
                     resTextView.setText(
                             String.format("x1 = %d\nx2 = %d\nx3 = %d\nx4 = %d\nЧас виконання: %d мс",
@@ -72,7 +74,7 @@ public class lab3Fragment extends Fragment {
         return population;
     }
 
-    private int[] findSolution(int a, int b, int c, int d, int y) {
+    private int[] findSolution(int a, int b, int c, int d, int y, double mutationProb) {
         int[][] population = generateStartingPopulation(y);
         int[] abcd = {a, b, c, d};
         int index;
@@ -89,17 +91,19 @@ public class lab3Fragment extends Fragment {
                 ) {
                     population = newPopulation;
                 } else {
-                    randomMutation(population, y);
+                    randomMutation(population, y, mutationProb);
                 }
             }
         }
         return population[index];
     }
 
-    private void randomMutation(int[][] population, int y) {
+    private void randomMutation(int[][] population, int y, double prob) {
         for (int i = 0; i < population.length; i++) {
-            int randIndex = rand.nextInt(population[0].length);
-            population[i][randIndex] = rand.nextInt(y+1);
+            for (int j = 0; j < population[0].length; j++) {
+                double coin = rand.nextDouble();
+                if (coin <= prob) population[i][j] = rand.nextInt(y + 1);
+            }
         }
     }
 

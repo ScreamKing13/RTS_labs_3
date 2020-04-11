@@ -45,7 +45,7 @@ public class lab2Fragment extends Fragment {
                 try {
                     int iterationsNum = Integer.parseInt(iterationNumEditText.getText().toString());
                     double learningRate = Double.parseDouble(learningRateEditText.getText().toString());
-                    long timeDeadline = (long) Double.parseDouble(timeDeadLineEditText.getText().toString()) * 1_000_000_000;
+                    long timeDeadline = (long) (Double.parseDouble(timeDeadLineEditText.getText().toString()) * 1_000_000_000);
                     fitModel(learningRate, iterationsNum, timeDeadline);
 
                 } catch (NumberFormatException e) {
@@ -62,6 +62,8 @@ public class lab2Fragment extends Fragment {
         double delta;
         int counter = 0 ;
         boolean completed = false;
+        w1 = 0;
+        w2 = 0;
         long start = System.nanoTime();
 
         int index = 0;
@@ -84,7 +86,14 @@ public class lab2Fragment extends Fragment {
 
         if (completed) {
             long execTimeMcs = (System.nanoTime() - start) / 1_000;
-            resultsTextView.setText(String.format("\tУспішно!\n\tw1 = %-6.3f w2 = %-6.3f\n\tЧас виконання: %d мкс", w1, w2, execTimeMcs));
+            resultsTextView.setText(
+                    String.format(
+                            "\tУспішно!\n" +
+                            "\tw1 = %-6.3f w2 = %-6.3f\n" +
+                            "\tЧас виконання: %d мкс" +
+                            "\n\tІтерацій витрачено: %d", w1, w2, execTimeMcs, counter
+                    )
+            );
 
         } else {
             String verdict = "\tНе вдалось навчити модель за вказаний дедлайн!";
